@@ -1,9 +1,3 @@
-Sure thing, Seirana 🌿
-Here’s your complete **GitHub-ready `README.md`**, written in Markdown format — clear, structured, and publication-grade.
-
----
-
-````markdown
 # 🧬 scIBD Colon – Cluster-wise Gene Expression Summary & Disease-specific Significance (Kruskal–Wallis)
 
 This repository provides a reproducible pipeline for analyzing **single-cell colon data (scIBD)** to identify genes whose expression levels differ across diseases and within cell clusters.  
