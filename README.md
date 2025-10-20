@@ -188,46 +188,6 @@ else:
 
 ---
 
-## 🧠 Notes & Recommendations
-
-* **Sparse matrices** are handled efficiently (no dense conversions).
-* **Rounding to 3 digits** maintains biological precision while reducing file size.
-* For large datasets, consider **parallelization** (e.g., `joblib`) to reduce runtime.
-* You can filter out diseases with too few cells (e.g., `<20`) before testing.
-* Kruskal–Wallis tests are non-parametric and robust to outliers.
-
----
-
-## 🧪 Example Interpretation
-
-* Genes with **FDR < 0.05** are considered significantly disease-associated.
-* Comparing per-cluster outputs reveals **cell-type-specific** disease signals.
-* `H_statistic` magnitude reflects overall between-disease separation strength.
-
----
-
-## 📖 References
-
-* Wolf et al., *Scanpy: large-scale single-cell gene expression data analysis*, *Genome Biology*, 2018.
-* Virtanen et al., *SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python*, *Nature Methods*, 2020.
-
----
-
-## 🧾 License
-
-MIT License © 2025
-Author: **S. Hashemi (shashemi)**
-
----
-
-## 💡 Citation Example
-
-If you use this pipeline, please cite it as:
-
-> Hashemi S. (2025). *scIBD Colon – Cluster-wise Gene Expression Summary & Disease-specific Significance (Kruskal–Wallis)*. GitHub Repository.
-
----
-
 ## 🧱 Environment (optional Conda setup)
 
 You can reproduce the environment with:
@@ -252,9 +212,4 @@ conda env create -f environment.yml
 conda activate scibd_analysis
 ```
 
-```
-
----
-
-Would you like me to also generate the corresponding **`environment.yml`** file and a short **usage example notebook** (`run_demo.ipynb`) for GitHub to make it more interactive?
 ```
