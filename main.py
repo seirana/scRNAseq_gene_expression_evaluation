@@ -25,9 +25,9 @@ for disease in adata.obs['disease'].unique():
     # Create a DataFrame to collect results
     results = pd.DataFrame(index=gene_names)
     
-    # Loop over each major cluster within this disease
-    for cluster in adata_disease.obs['major_cluster'].unique(): #major_cluster
-        subset = adata_disease[adata_disease.obs['major_cluster'] == cluster]
+    # Loop over each minor cluster within this disease
+    for cluster in adata_disease.obs['minor_cluster'].unique(): #minor_cluster
+        subset = adata_disease[adata_disease.obs['minor_cluster'] == cluster]
         X = subset.X
         
         # Convert to dense array if sparse
@@ -204,7 +204,7 @@ from scipy.stats import kruskal
 from scipy import sparse as sp
 
 # --------- config ----------
-cluster_col = "major_cluster"
+cluster_col = "minor_cluster"
 disease_col = "disease"
 out_dir = "kruskal_per_cluster"
 os.makedirs(out_dir, exist_ok=True)
