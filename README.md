@@ -3,17 +3,17 @@
 This repository provides a reproducible pipeline for analyzing **single-cell colon data (scIBD)** to identify genes whose expression levels differ across diseases and within cell clusters.  
 
 The workflow:
-1. Computes per-gene summary statistics for each **disease × minor_cluster**.
+1. Computes per-gene summary statistics for each **disease × minor/major_cluster**.
 2. Aggregates disease-level averages across clusters.
 3. Combines all diseases into a unified table.
 4. Applies **Kruskal–Wallis tests** to detect significant disease effects on gene expression.
-5. Repeats these tests **within each minor_cluster** to account for cell-type-specific differences.
+5. Repeats these tests **within each minor/major_cluster** to account for cell-type-specific differences.
 
 ---
 
 ## ❓ Research Question
 
-> *Which genes exhibit disease-associated expression differences in single-cell colon data, and how consistent are these effects across minor cell clusters?*
+> *Which genes exhibit disease-associated expression differences in single-cell colon data, and how consistent are these effects across minor/major cell clusters?*
 
 ---
 
@@ -24,7 +24,7 @@ The workflow:
 
 - **Required columns in** `adata.obs`  
   - `disease`
-  - `minor_cluster`
+  - `minor/major_cluster`
 
 - **Gene names:** stored in `adata.var_names`  
 - **Expression matrix:** `adata.X` (can be sparse or dense)
@@ -66,12 +66,12 @@ This script:
 
 ## 🧩 Step-by-Step Overview
 
-### **1️⃣ Per-disease × minor_cluster Gene Statistics**
+### **1️⃣ Per-disease × minor/major_cluster Gene Statistics**
 
 For each disease:
 
 * Subset to cells of that disease.
-* For each `minor_cluster`, compute per-gene:
+* For each `minor/major_cluster`, compute per-gene:
 
   * **mean**, **variance**, **min**, **max**
 
