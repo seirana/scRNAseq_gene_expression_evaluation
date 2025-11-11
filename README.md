@@ -1,13 +1,40 @@
-# 🧬 scIBD Colon – Cluster-wise Gene Expression Summary & Disease-specific Significance (Kruskal–Wallis)
+# 🧬 scIBD Colon – Cluster-wise Gene Expression Summary & Disease-specific Significance
 
 This repository provides a reproducible pipeline for analyzing **single-cell colon data (scIBD)** to identify genes whose expression levels differ across diseases and within cell clusters.  
 
 The workflow:
-1. Computes per-gene summary statistics for each **disease × minor/major_cluster**.
-2. Aggregates disease-level averages across clusters.
-3. Combines all diseases into a unified table.
-4. Applies **Kruskal–Wallis tests** to detect significant disease effects on gene expression.
-5. Repeats these tests **within each minor/major_cluster** to account for cell-type-specific differences.
+1. **Cell counts per (cell type, disease)**  
+   Produces: `outputs/cell_type_count_per_disease.csv`
+
+2. **Per-disease gene expression statistics per cell type**  
+   For every cell type, computes **min, max, mean, variance** of every gene for every disease.  
+   Produces: `outputs/stats_per_celltype/{celltype}_stats.csv`
+
+3. **Kruskal–Wallis test per gene per cell type**  
+   Non-parametric multi-group test across diseases.  
+   Produces: `outputs/kw_per_celltype/{celltype}_KW.csv`
+
+4. **Effect size per gene per cell type**  
+   Effect size defined as:  
+   \[
+   \text{effect\_size} = \max(\text{mean across diseases}) - \min(\text{mean across diseases})
+   \]
+   and categorized into `low` (<0.25), `medium` (0.25–0.5), `high` (>0.5).  
+   Produces: `outputs/effectsize_per_celltype/{celltype}_effectsize.csv`
+
+5. **Pairwise post-hoc testing**  
+   For every gene, every cell type, and every disease pair, runs Mann–Whitney U (two-sided) and adjusts p-values with Benjamini–Hochberg.  
+   Produces: `outputs/posthoc_per_celltype/{celltype}_pairwise_posthoc.csv`
+
+6. **UC_inflamed-specific separation**  
+   Selects genes *per cell type* for which:
+   - Kruskal–Wallis p < 0.05 / 161060
+   - Kruskal–Wallis FDR < 0.05
+   - Effect size > 0.25
+   - All pairwise tests involving `UC_inflamed` pass
+     - Mann–Whitney p < 0.05 / 161060
+     - Mann–Whitney FDR < 0.05  
+   Produces: `outputs/uc_inflamed_separated/{celltype}_UCinflamed.csv`
 
 ---
 
