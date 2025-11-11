@@ -131,5 +131,3 @@ Activate:
 conda env create -f environment.yml
 conda activate scibd_analysis
 ```
-
-```
