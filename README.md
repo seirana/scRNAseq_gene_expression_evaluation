@@ -40,7 +40,7 @@ The workflow:
 
 ## ❓ Research Question
 
-> *Which genes exhibit disease-associated expression differences in single-cell colon data, and how consistent are these effects across minor/major cell clusters?*
+> *Which genes exhibit disease-associated expression differences in single-cell colon data, and how consistent are these effects across cell clusters?*
 
 ---
 
