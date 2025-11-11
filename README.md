@@ -3,7 +3,7 @@
 This repository provides a reproducible pipeline for analyzing **single-cell colon data (scIBD)** to identify genes whose expression levels differ across diseases and within cell clusters.  
 
 The workflow:
-1. **Cell counts per (cell type, disease)**  
+1. **Cell counts per disease**  
    Produces: `outputs/cell_type_count_per_disease.csv`
 
 2. **Per-disease gene expression statistics per cell type**  
