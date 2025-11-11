@@ -28,11 +28,11 @@ The workflow:
 
 6. **UC_inflamed-specific separation**  
    Selects genes *per cell type* for which:
-   - Kruskal–Wallis p < 0.05 / 161060
+   - Kruskal–Wallis p < 0.05 / number of genes
    - Kruskal–Wallis FDR < 0.05
    - Effect size > 0.25
    - All pairwise tests involving `UC_inflamed` pass
-     - Mann–Whitney p < 0.05 / 161060
+     - Mann–Whitney p < 0.05 / number of genes
      - Mann–Whitney FDR < 0.05  
    Produces: `outputs/uc_inflamed_separated/{celltype}_UCinflamed.csv`
 
@@ -47,11 +47,11 @@ The workflow:
 ## 📥 Input
 
 - **AnnData file:**  
-  `/work_beegfs/sukmb655/data_scDRS/sinlge cell datasets/scIBD_Colon.h5ad`
+  `./scIBD_Colon.h5ad`
 
 - **Required columns in** `adata.obs`  
   - `disease`
-  - `minor/major_cluster`
+  - `major_cluster`
 
 - **Gene names:** stored in `adata.var_names`  
 - **Expression matrix:** `adata.X` (can be sparse or dense)
@@ -77,118 +77,17 @@ from scipy import sparse as sp
 ## 🚀 How to Run
 
 ```bash
-python run_scibd_pipeline.py
+python main.py
 ```
 
 This script:
 
 1. Loads the `.h5ad` file using **Scanpy**.
 2. Computes per-cluster gene statistics.
-3. Aggregates disease-level averages.
-4. Merges all diseases into one file.
-5. Runs global and per-cluster Kruskal–Wallis tests.
-6. Saves all results in organized output folders.
-
----
-
-## 🧩 Step-by-Step Overview
-
-### **1️⃣ Per-disease × minor/major_cluster Gene Statistics**
-
-For each disease:
-
-* Subset to cells of that disease.
-* For each `minor/major_cluster`, compute per-gene:
-
-  * **mean**, **variance**, **min**, **max**
-
-➡️ Output:
-`cluster_gene_stats/{disease}_gene_stats.csv`
-
-* Rows: genes
-* Columns: `{cluster}_mean`, `{cluster}_var`, `{cluster}_min`, `{cluster}_max`
-
----
-
-### **2️⃣ Per-disease Averages across Clusters**
-
-Compute the **mean of cluster means** for each gene.
-
-➡️ Output:
-`disease_avg_expression/{disease}_avg_expression.csv`
-Columns: `gene`, `avg_expression_across_clusters`
-
----
-
-### **3️⃣ Combined Disease Matrix**
-
-Merge all per-disease averages into one file.
-
-➡️ Output:
-`disease_avg_expression_all.csv`
-
-* Rows: genes
-* Columns: one per disease
-
----
-
-### **4️⃣ Global Kruskal–Wallis (All Diseases)**
-
-Tests whether each gene’s expression differs between diseases across all cells (ignoring clusters).
-
-➡️ Output:
-`gene_disease_significance.csv`
-Columns:
-| gene | kruskal_p | FDR |
-
----
-
-### **5️⃣ Per-cluster Kruskal–Wallis**
-
-* Rounds `adata.X` to **3 decimal digits** for numerical stability.
-* Runs Kruskal–Wallis tests for each gene **within each cluster**, comparing diseases only inside that cluster.
-* Applies **Benjamini–Hochberg FDR correction**.
-
-➡️ Output (in `kruskal_per_cluster/`):
-
-* `{cluster}_gene_disease_significance.csv`
-
-  * Columns: `gene`, `H_statistic`, `p_value`, `FDR`
-* `{cluster}_group_sizes.csv`
-
-  * Columns: `disease`, `n_cells`
-
----
-
-## 🧪 Statistical Methods
-
-| Test                                     | Purpose                                                           | Scope                 |
-| ---------------------------------------- | ----------------------------------------------------------------- | --------------------- |
-| **Kruskal–Wallis (scipy.stats.kruskal)** | Detects differences in median gene expression between ≥2 diseases | Global or per-cluster |
-| **Benjamini–Hochberg (FDR)**             | Controls for multiple testing                                     | Applied per test set  |
-
-> The per-cluster test controls for cluster composition differences between diseases.
-
----
-
-## 🎯 Precision and Rounding
-
-| Data Type           | Range | Rounding | Example          |
-| ------------------- | ----- | -------- | ---------------- |
-| Expression values   | 0–10  | 3 digits | 2.456 → 2.456    |
-| Kruskal H statistic | 0–100 | 3 digits | 12.349 → 12.349  |
-| p-values / FDR      | 0–1   | 3 digits | 0.000234 → 0.000 |
-
-Expression rounding is done safely for both sparse and dense matrices:
-
-```python
-if sp.issparse(adata.X):
-    X = adata.X.tocoo(copy=True)
-    X.data = np.round(X.data, 3)
-    adata.X = X.tocsr()
-else:
-    adata.X = np.round(adata.X, 3)
-```
+3. Runs Kruskal–Wallis tests.
+4. calculates effect size per gene per cell type.
+6. Runs pairwise post-hoc testin.
+7. Evaluates the results for UC_inflamed disease.
 
 ---
 
@@ -196,23 +95,17 @@ else:
 
 ```
 .
-├── run_scibd_pipeline.py
-├── cluster_gene_stats/
-│   ├── UC_inflamed_gene_stats.csv
-│   ├── Healthy_gene_stats.csv
-│   └── ...
-├── disease_avg_expression/
-│   ├── UC_inflamed_avg_expression.csv
-│   ├── Healthy_avg_expression.csv
-│   └── ...
-├── disease_avg_expression_all.csv
-├── gene_disease_significance.csv
-└── kruskal_per_cluster/
-    ├── Enterocyte_gene_disease_significance.csv
-    ├── Enterocyte_group_sizes.csv
-    └── ...
+├── data/
+│   └── input.h5ad
+├── outputs/
+│   ├── cell_type_count_per_disease.csv
+│   ├── stats_per_celltype/
+│   ├── kw_per_celltype/
+│   ├── effectsize_per_celltype/
+│   ├── posthoc_per_celltype/
+│   └── uc_inflamed_separated/
+└── run_pipeline.py
 ```
-
 ---
 
 ## 🧱 Environment (optional Conda setup)
