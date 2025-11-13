@@ -104,7 +104,7 @@ This script:
 │   ├── effectsize_per_celltype/
 │   ├── posthoc_per_celltype/
 │   └── uc_inflamed_separated/
-└── run_pipeline.py
+└── main.py
 ```
 ---
 
