@@ -34,7 +34,7 @@ The workflow:
    - All pairwise tests involving `UC_inflamed` pass
      - Mann–Whitney p < 0.05 / number of genes
      - Mann–Whitney FDR < 0.05  
-   Produces: `outputs/uc_inflamed_separated/{celltype}_UCinflamed.csv`
+   Produces: `outputs/uc_inflamed/{celltype}_UCinflamed.csv`
 
 ---
 
