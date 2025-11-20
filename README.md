@@ -7,7 +7,7 @@ The workflow:
    Produces: `outputs/cell_type_count_per_disease.csv`
 
 2. **Per-disease gene expression statistics per cell type**  
-   For every cell type, computes **min, max, mean, variance** of every gene for every disease.  
+   For each cell type, it computes the **min, max, mean, and variance** of each gene for each disease.  
    Produces: `outputs/stats_per_celltype/{celltype}_stats.csv`
 
 3. **Kruskal–Wallis test per gene per cell type**  
@@ -23,16 +23,16 @@ The workflow:
    Produces: `outputs/effectsize_per_celltype/{celltype}_effectsize.csv`
 
 5. **Pairwise post-hoc testing**  
-   For every gene, every cell type, and every disease pair, runs Mann–Whitney U (two-sided) and adjusts p-values with Benjamini–Hochberg.  
+   For every gene, every cell type, and every disease pair, run Mann–Whitney U (two-sided) and adjust p-values with Benjamini–Hochberg.  
    Produces: `outputs/posthoc_per_celltype/{celltype}_pairwise_posthoc.csv`
 
 6. **UC_inflamed-specific separation**  
    Selects genes *per cell type* for which:
-   - Kruskal–Wallis p < 0.05 / number of genes
+   - Kruskal–Wallis p < 0.05 / |genes| * |diseases|
    - Kruskal–Wallis FDR < 0.05
    - Effect size > 0.25
    - All pairwise tests involving `UC_inflamed` pass
-     - Mann–Whitney p < 0.05 / number of genes
+     - Mann-Whitney p < 0.05 / |genes| * |diseases|
      - Mann–Whitney FDR < 0.05  
    Produces: `outputs/uc_inflamed/{celltype}_UCinflamed.csv`
 
@@ -86,7 +86,7 @@ This script:
 2. Computes per-cluster gene statistics.
 3. Runs Kruskal–Wallis tests.
 4. calculates effect size per gene per cell type.
-6. Runs pairwise post-hoc testin.
+6. Runs pairwise post-hoc testing.
 7. Evaluates the results for UC_inflamed disease.
 
 ---
