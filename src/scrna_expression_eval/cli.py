@@ -7,6 +7,7 @@ import platform
 import re
 import subprocess
 import sys
+from importlib.metadata import version
 from pathlib import Path
 
 import anndata as ad
@@ -634,7 +635,7 @@ def main() -> int:
             "platform": (
                 platform.platform()
             ),
-            "anndata": ad.__version__,
+            "anndata": version("anndata"),
             "numpy": np.__version__,
             "pandas": pd.__version__,
             "scipy": scipy.__version__,
