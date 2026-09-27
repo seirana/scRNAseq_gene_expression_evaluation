@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Environments
+.venv/
+venv/
+env/
+
+# IDE / OS
+.DS_Store
+Thumbs.db
+
+# Local configuration
+.env
+.env.*
+
+# Local single-cell data
+data/*.h5ad
+data/*.h5
+data/*.loom
+*.h5ad
+*.loom
+
+# Generated analysis outputs
+outputs/
+plots/
+results/*
+!results/README.md
+!results/Methodological Overview.pdf
