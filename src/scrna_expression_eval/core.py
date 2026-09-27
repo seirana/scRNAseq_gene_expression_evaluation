@@ -512,12 +512,24 @@ def pairwise_mannwhitney_table(
         ):
             first = first_matrix[:, gene_index]
             second = second_matrix[:, gene_index]
-            statistic, p_value = mannwhitneyu(
-                first,
-                second,
-                alternative="two-sided",
-                method="auto",
-            )
+            combined = np.concatenate([first, second])
+            if np.allclose(combined, combined[0]):
+                statistic = n_first * n_second / 2.0
+                p_value = 1.0
+                test_status = "all_values_identical"
+            else:
+                statistic, p_value = mannwhitneyu(
+                    first,
+                    second,
+                    alternative="two-sided",
+                    method="auto",
+                )
+                if not np.isfinite(p_value):
+                    p_value = 1.0
+                    test_status = "nonfinite_p_conservative"
+                else:
+                    test_status = "ok"
+
             contrast_rows.append(
                 {
                     "gene": gene,
@@ -532,6 +544,7 @@ def pairwise_mannwhitney_table(
                     ),
                     "n1_samples": n_first,
                     "n2_samples": n_second,
+                    "test_status": test_status,
                 }
             )
 
